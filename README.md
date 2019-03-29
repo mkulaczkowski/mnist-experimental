@@ -17,17 +17,28 @@ First make sure you've [added the models folder to your Python path](/official/#
 Then to train the model, run the following:
 
 ```
-python mnist.py
-```
-
-The model will begin training and will automatically evaluate itself on the
-validation data.
-
-Illustrative unit tests and benchmarks can be run with:
-
-```
 python mnist_test.py
-python mnist_test.py --benchmarks=.
+```
+
+Distributed Training on Gradient
+
+Just run the example with following parameters:
+```
+  "name": "Mnist Sample",
+  "projectHandle": "<your project handle",
+  "parameterServerContainer": "tensorflow/tensorflow:1.13.1-gpu-py3",
+  "parameterServerMachineType": "K80",
+  "parameterServerCount": 1,
+  "workerCommand": "python mnist.py",
+  "workerContainer": "tensorflow/tensorflow:1.13.1-gpu-py3",
+  "workspaceUrl": "git+https://github.com/paperspace/mnist-sample.git",
+  "workerMachineType": "K80",
+  "workerCount": 2,
+  "parameterServerCommand": "python mnist.py"
+```
+Gradient will generate TF_CONFIG in base64 format for each node so all you need to do in your other projects:
+```
+paperspace_tf_config = json.loads(base64.urlsafe_b64decode(os.environ.get('TF_CONFIG')).decode('utf-8'))
 ```
 
 ## Exporting the model
@@ -42,18 +53,3 @@ The SavedModel will be saved in a timestamped directory under `/tmp/mnist_saved_
 
 **Getting predictions with SavedModel**
 Use [`saved_model_cli`](https://www.tensorflow.org/guide/saved_model#cli_to_inspect_and_execute_savedmodel) to inspect and execute the SavedModel.
-
-`examples.npy` contains the data from `example5.png` and `example3.png` in a numpy array, in that order. The array values are normalized to values between 0 and 1.
-
-The output should look similar to below:
-```
-Result for output key classes:
-[5 3]
-Result for output key probabilities:
-[[  1.53558474e-07   1.95694142e-13   1.31193523e-09   5.47467265e-03
-    5.85711526e-22   9.94520664e-01   3.48423509e-06   2.65365645e-17
-    9.78631419e-07   3.15522470e-08]
- [  1.22413359e-04   5.87615965e-08   1.72251271e-06   9.39960718e-01
-    3.30306928e-11   2.87386645e-02   2.82353517e-02   8.21146413e-18
-    2.52568233e-03   4.15460236e-04]]
-```
