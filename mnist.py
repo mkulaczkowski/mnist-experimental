@@ -227,7 +227,7 @@ def run_mnist(flags_obj):
         flags_obj.hooks, model_dir=flags_obj.model_dir,
         batch_size=flags_obj.batch_size)
 
-    train_spec = tf.estimator.TrainSpec(input_fn=train_input_fn, hooks=train_hooks, max_steps=20000)
+    train_spec = tf.estimator.TrainSpec(input_fn=train_input_fn, hooks=train_hooks, max_steps=15000)
     eval_spec = tf.estimator.EvalSpec(input_fn=eval_input_fn, steps=None,
                                       start_delay_secs=0,
                                       throttle_secs=60)
