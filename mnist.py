@@ -116,7 +116,8 @@ def define_mnist_flags():
                             model_dir=model_dir,
                             export_dir=os.environ.get('PS_MODEL_PATH', os.getcwd() + '/models'),
                             batch_size=int(os.environ.get('batch_size', 100)),
-                            train_epochs=int(os.environ.get('train_epochs', 20)))
+                            epochs_between_evals=20,
+                            train_epochs=int(os.environ.get('train_epochs', 40)))
 
 
 def model_fn(features, labels, mode, params):
